@@ -104,6 +104,10 @@ async function collectPaginated(envUrl, path, token, maxPages = 20) {
 }
 
 async function discoverPowerPageComponents(envUrl, websiteRecordId, token) {
+  // Verified 2026-04-21 against org1e98cc97 (v9.2 endpoint): both quoted and
+  // unquoted GUID forms return identical results. Keeping quoted because it's
+  // the historically safer form and tests against this codebase assume it.
+  // See memory/project_pr107_deferred_validation.md (Check 1) for evidence.
   const path =
     `powerpagecomponents` +
     `?$filter=_powerpagesiteid_value eq '${websiteRecordId}'` +
