@@ -123,29 +123,40 @@ test('computeSplitPlan produces 1 proposed solution for single', () => {
   assert.equal(result.proposedSolutions[0].uniqueName, 'Test');
 });
 
-test('computeSplitPlan produces 2 solutions for Layer split', () => {
+test('computeSplitPlan produces 2 partition solutions + 1 Future buffer for Layer split', () => {
   const result = computeSplitPlan({
     estimate: baseEstimate({ totalSizeMB: 142, webFilesAggregateMB: 110 }),
     config: baseConfig(),
     meta: { baseName: 'Test', siteName: 'Test Site' },
   });
   assert.equal(result.splitStrategy, 'strategy-1-layer');
-  assert.equal(result.proposedSolutions.length, 2);
+  // 2 partition solutions (Core, WebAssets) + 1 Future buffer reserved for new additions
+  assert.equal(result.proposedSolutions.length, 3);
   assert.match(result.proposedSolutions[0].uniqueName, /Core$/);
   assert.match(result.proposedSolutions[1].uniqueName, /WebAssets$/);
+  assert.equal(result.proposedSolutions[2].uniqueName, 'Test_Future');
+  assert.equal(result.proposedSolutions[2].isFutureBuffer, true);
   assert.equal(result.proposedSolutions[0].order, 1);
   assert.equal(result.proposedSolutions[1].order, 2);
+  assert.equal(result.proposedSolutions[2].order, 3);
 });
 
-test('computeSplitPlan produces 4 solutions for Change-Frequency split', () => {
+test('computeSplitPlan produces 4 partition solutions + 1 Future buffer for Change-Frequency split', () => {
   const result = computeSplitPlan({
     estimate: baseEstimate({ totalSizeMB: 74, componentCount: 7200, cloudFlowCount: 12 }),
     config: baseConfig(),
     meta: { baseName: 'Test', siteName: 'Test Site' },
   });
-  assert.equal(result.proposedSolutions.length, 4);
+  assert.equal(result.proposedSolutions.length, 5);
   const names = result.proposedSolutions.map((s) => s.uniqueName);
-  assert.deepEqual(names, ['Test_Foundation', 'Test_Integration', 'Test_Config', 'Test_Content']);
+  assert.deepEqual(names, [
+    'Test_Foundation',
+    'Test_Integration',
+    'Test_Config',
+    'Test_Content',
+    'Test_Future',
+  ]);
+  assert.equal(result.proposedSolutions[4].isFutureBuffer, true);
 });
 
 test('computeSplitPlan Strategy 3 uses explicit config.domains when present', () => {
@@ -161,11 +172,13 @@ test('computeSplitPlan Strategy 3 uses explicit config.domains when present', ()
     meta: { baseName: 'Test', siteName: 'Test Site' },
   });
   assert.equal(result.splitStrategy, 'strategy-3-schema-segmentation');
-  // 2 explicit domains + 1 Site solution
-  assert.equal(result.proposedSolutions.length, 3);
+  // 2 explicit domains + 1 Site solution + 1 Future buffer
+  assert.equal(result.proposedSolutions.length, 4);
   assert.equal(result.proposedSolutions[0].uniqueName, 'Test_Catalog');
   assert.equal(result.proposedSolutions[1].uniqueName, 'Test_Orders');
   assert.equal(result.proposedSolutions[2].uniqueName, 'Test_Site');
+  assert.equal(result.proposedSolutions[3].uniqueName, 'Test_Future');
+  assert.equal(result.proposedSolutions[3].isFutureBuffer, true);
 });
 
 test('computeSplitPlan Strategy 3 falls back to prefix heuristic when no domains configured', () => {
@@ -197,6 +210,79 @@ test('computeSplitPlan additive Strategy 4 prepends EnvVars solution', () => {
   assert.ok(result.appliedStrategies.includes('strategy-4-config-isolation'));
   assert.equal(result.proposedSolutions[0].uniqueName, 'Test_EnvVars');
   assert.equal(result.proposedSolutions[0].order, 1);
+  // Even additive flows still end with the Future buffer.
+  const last = result.proposedSolutions[result.proposedSolutions.length - 1];
+  assert.equal(last.uniqueName, 'Test_Future');
+  assert.equal(last.isFutureBuffer, true);
+});
+
+// --- Future buffer behavior -------------------------------------------------
+
+test('single-solution plan does NOT get a Future buffer appended', () => {
+  const result = computeSplitPlan({
+    estimate: baseEstimate(),
+    config: baseConfig(),
+    meta: { baseName: 'Test', siteName: 'Test Site' },
+  });
+  assert.equal(result.splitStrategy, 'single');
+  assert.equal(result.proposedSolutions.length, 1, 'single plan should stay one solution');
+  assert.ok(
+    !result.proposedSolutions.some((s) => s.isFutureBuffer),
+    'single plan has no partition to protect — no Future buffer expected'
+  );
+});
+
+test('Future buffer has zero size, zero count, and isFutureBuffer flag set', () => {
+  const result = computeSplitPlan({
+    estimate: baseEstimate({ totalSizeMB: 142, webFilesAggregateMB: 110 }),
+    config: baseConfig(),
+    meta: { baseName: 'Test', siteName: 'Test Site' },
+  });
+  const future = result.proposedSolutions.find((s) => s.isFutureBuffer);
+  assert.ok(future, 'Future buffer should be present in a multi-solution split');
+  assert.equal(future.sizeMB, 0);
+  assert.equal(future.componentCount, 0);
+  assert.deepEqual(future.components, []);
+  assert.deepEqual(future.componentTypes, ['Any']);
+  assert.match(future.description, /new components added to the site/i);
+});
+
+test('Future buffer uses consistent naming and is always the last entry', () => {
+  // Run multiple strategies; Future should always come last with the same suffix.
+  const cases = [
+    { label: 'layer', est: baseEstimate({ totalSizeMB: 142, webFilesAggregateMB: 110 }) },
+    { label: 'change-freq', est: baseEstimate({ totalSizeMB: 74, componentCount: 7200, cloudFlowCount: 12 }) },
+    { label: 'schema', est: baseEstimate({ tableCount: 34, schemaAttrCount: 32000 }) },
+  ];
+  for (const c of cases) {
+    const result = computeSplitPlan({
+      estimate: c.est,
+      config: baseConfig(),
+      meta: { baseName: 'Test', siteName: 'Test Site' },
+    });
+    const last = result.proposedSolutions[result.proposedSolutions.length - 1];
+    assert.equal(last.uniqueName, 'Test_Future', `${c.label}: last solution should be Test_Future`);
+    assert.equal(last.order, result.proposedSolutions.length, `${c.label}: Future should have the highest order`);
+  }
+});
+
+test('appendFutureBuffer exported and idempotent-safe on single-entry arrays', () => {
+  const { appendFutureBuffer } = require('../lib/compute-split-plan');
+  const single = [{ uniqueName: 'Alpha', order: 1 }];
+  // Single-entry arrays represent a single-solution plan — no buffer.
+  assert.deepEqual(appendFutureBuffer(single, { baseName: 'X', siteName: 'X' }), single);
+  // Multi-entry arrays get the buffer appended exactly once.
+  const multi = [
+    { uniqueName: 'Alpha', order: 1 },
+    { uniqueName: 'Beta', order: 2 },
+  ];
+  const out = appendFutureBuffer(multi, { baseName: 'X', siteName: 'X Site' });
+  assert.equal(out.length, 3);
+  assert.equal(out[2].uniqueName, 'X_Future');
+  assert.equal(out[2].order, 3);
+  // Empty/invalid input shape: return as-is.
+  assert.deepEqual(appendFutureBuffer([], { baseName: 'X', siteName: 'X' }), []);
+  assert.deepEqual(appendFutureBuffer(null, { baseName: 'X', siteName: 'X' }), null);
 });
 
 // --- Asset advisory ---------------------------------------------------------

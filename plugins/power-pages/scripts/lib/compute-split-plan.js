@@ -386,6 +386,39 @@ function sanitizeDomainName(name) {
   return String(name).replace(/[^A-Za-z0-9]/g, '');
 }
 
+/**
+ * Appends an empty "Future Growth" solution to a multi-solution split so there
+ * is an obvious default target for any new components the team adds later. Without
+ * this buffer, every new server-logic / flow / env var tends to end up crammed
+ * into the wrong layer solution and forces a re-plan.
+ *
+ * Rules:
+ *   - Only appended when the split already has ≥ 2 solutions (splits, not `single`).
+ *   - Sized at 0 MB / 0 components — it's a reserved slot, not a prediction.
+ *   - Marked with `isFutureBuffer: true` so renderers and setup-solution can
+ *     style/describe it distinctly from partition-owned solutions.
+ *   - Tagged with `componentTypes: ['Any']` to signal "open to any type."
+ */
+function appendFutureBuffer(solutions, meta) {
+  if (!Array.isArray(solutions) || solutions.length < 2) return solutions;
+  const nextOrder = (solutions[solutions.length - 1].order || solutions.length) + 1;
+  return [
+    ...solutions,
+    {
+      uniqueName: `${meta.baseName}_Future`,
+      displayName: `${meta.siteName} — Future Growth`,
+      order: nextOrder,
+      componentTypes: ['Any'],
+      description:
+        'Reserved empty solution. New components added to the site after this plan (server logic, cloud flows, env vars, pages, etc.) should be added here by default so the partition-owned solutions above stay stable. Rename it or fold it into an existing solution if site growth plateaus.',
+      sizeMB: 0,
+      componentCount: 0,
+      components: [],
+      isFutureBuffer: true,
+    },
+  ];
+}
+
 function round(n) {
   return Math.round((Number(n) || 0) * 10) / 10;
 }
@@ -483,6 +516,11 @@ function computeSplitPlan({ estimate, config, meta }) {
     proposedSolutions = applyConfigIsolation(proposedSolutions, estimate, meta);
   }
 
+  // Add a reserved `{Prefix}_Future` solution when the site is actually being
+  // split so new components have a defined home. Single-solution plans skip
+  // this — there's no split to protect.
+  proposedSolutions = appendFutureBuffer(proposedSolutions, meta);
+
   const splitWarnings = validateSplits(proposedSolutions, config.thresholds);
   const recommendations = buildRecommendations(estimate, strategy, config).concat(splitWarnings);
 
@@ -538,6 +576,7 @@ module.exports = {
   partitionByChangeFrequency,
   partitionBySchema,
   applyConfigIsolation,
+  appendFutureBuffer,
   validateSplits,
   buildRecommendations,
 };
