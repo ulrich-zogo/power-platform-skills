@@ -1,0 +1,22 @@
+{
+  "name": "power-platform-orchestrator",
+  "version": "1.0.0",
+  "description": "Orchestrates multi-component Power Platform projects by coordinating skills across Power Platform plugins.",
+  "author": {
+    "name": "Microsoft",
+    "url": "https://www.microsoft.com"
+  },
+  "homepage": "https://github.com/microsoft/power-platform-skills/",
+  "repository": "https://github.com/microsoft/power-platform-skills/",
+  "license": "MIT",
+  "keywords": [
+    "power-platform",
+    "orchestrator",
+    "multi-plugin",
+    "coordination",
+    "power-pages",
+    "canvas-apps",
+    "code-apps",
+    "dataverse"
+  ]
+}
