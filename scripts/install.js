@@ -638,10 +638,12 @@ function printGetStarted(tool) {
     console.log("    opencode session -> /mcp-apps-generate-mcp-app-ui");
     console.log("    opencode session -> /code-apps-create-code-app");
     console.log("    opencode session -> /canvas-apps-generate-canvas-app");
+    console.log("    opencode session -> /power-platform-orchestrator-power-platform-orchestrator");
     return;
   }
 
   console.log(`    ${tool} session  ->  /power-pages:create-site`);
+  console.log(`    ${tool} session  ->  /power-platform-orchestrator:power-platform-orchestrator`);
 }
 
 // ── Main ──────────────────────────────────────────────────────

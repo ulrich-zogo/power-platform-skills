@@ -4,7 +4,7 @@ This file provides guidance to AI Agents when working with code in this reposito
 
 ## What This Repo Is
 
-A **plugin marketplace** for Power Platform development by Microsoft. The marketplace manifest (`.claude-plugin/marketplace.json`) references individual plugins in `plugins/`. Each plugin has its own `AGENTS.md` with plugin-specific guidance.
+A **plugin marketplace** for Power Platform development by Microsoft. The marketplace manifest (`.claude-plugin/marketplace.json`) references individual plugins in `plugins/`, including the `power-platform-orchestrator` meta-plugin for coordinating multi-component solutions. Each plugin has its own `AGENTS.md` with plugin-specific guidance.
 
 ## Repository Structure
 
@@ -21,6 +21,8 @@ power-platform-skills/
 │       ├── commands/         # Command entry points
 │       ├── shared/           # Shared resources and documentation
 │       └── skills/           # Skill workflows (SKILL.md in subdirectories)
+│       # Examples: power-pages, canvas-apps, code-apps, model-apps, mcp-apps,
+│       #           power-platform-orchestrator
 ├── shared/                   # Cross-plugin shared resources
 │   └── skills/               # Shared skill definitions
 │       └── <skill-name>/     # SKILL.template.md + workflow .md files
