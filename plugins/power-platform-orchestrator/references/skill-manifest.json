@@ -1,0 +1,382 @@
+{
+  "generatedAt": "2026-04-28T02:20:19.168Z",
+  "marketplaceName": "power-platform-skills",
+  "plugins": [
+    {
+      "name": "canvas-apps",
+      "description": "Build Power Apps Canvas Apps using the Canvas Authoring MCP server",
+      "category": "development",
+      "tags": [
+        "canvas apps",
+        "connectors",
+        "microsoft",
+        "msapp",
+        "pa-yaml",
+        "power apps",
+        "power platform"
+      ],
+      "source": "./plugins/canvas-apps",
+      "skills": [
+        {
+          "name": "configure-canvas-mcp",
+          "description": "Configure the Canvas Authoring MCP server for Claude Code, VS Code Copilot, or GitHub Copilot CLI. USE WHEN \"configure MCP\", \"set up MCP server\", \"MCP not working\", \"connect Canvas Apps MCP\", \"canvas-authoring not available\", \"MCP not configured\", \"set up canvas apps\". DO NOT USE WHEN prerequisites are missing — direct the user to install .NET 10 SDK first.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "configure-canvas-mcp"
+        },
+        {
+          "name": "edit-canvas-app",
+          "description": "Edit an existing Power Apps canvas app. USE WHEN the user wants to modify, update, change, or edit an existing Canvas App or pa.yaml files.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "edit-canvas-app"
+        },
+        {
+          "name": "generate-canvas-app",
+          "description": "Generate a complete, visually distinctive Power Apps canvas app with YAML. USE WHEN the user wants to create, build, or generate a Canvas App or pa.yaml files.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "generate-canvas-app"
+        },
+        {
+          "name": "report-issue",
+          "description": "Use this skill when the user wants to \"report a bug\", \"file an issue\", \"report an issue\", \"submit a bug report\", or report any problem with the canvas-apps plugin to the GitHub repository.",
+          "userInvocable": true,
+          "argumentHint": "[optional: brief description of the bug]",
+          "arguments": "[optional: brief description of the bug]",
+          "skillDirectory": "report-issue"
+        }
+      ]
+    },
+    {
+      "name": "code-apps-preview",
+      "description": "Build and deploy Power Apps code apps using React, Vite, and Power Platform connectors",
+      "category": "development",
+      "tags": [
+        "code apps",
+        "connectors",
+        "dataverse",
+        "microsoft",
+        "power apps",
+        "power platform",
+        "react",
+        "vite"
+      ],
+      "source": "./plugins/code-apps",
+      "skills": [
+        {
+          "name": "add-azuredevops",
+          "description": "Adds Azure DevOps connector to a Power Apps code app. Use when querying work items, creating bugs, managing pipelines, or making ADO API calls.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-azuredevops"
+        },
+        {
+          "name": "add-connector",
+          "description": "Adds any Power Platform connector to a Power Apps code app. Generic fallback for connectors not covered by a specific skill.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-connector"
+        },
+        {
+          "name": "add-datasource",
+          "description": "Adds a data source or connector to a Power Apps code app. Asks what the user wants to accomplish and routes to the appropriate specialized skill.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-datasource"
+        },
+        {
+          "name": "add-dataverse",
+          "description": "Adds Dataverse tables to a Power Apps code app with generated TypeScript models and services. Can also create new Dataverse tables. Use when connecting to Dataverse, adding tables, creating schema, or querying Dataverse data.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-dataverse"
+        },
+        {
+          "name": "add-excel",
+          "description": "Adds Excel Online (Business) connector to a Power Apps code app. Use when reading or writing Excel workbook data from OneDrive or SharePoint.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-excel"
+        },
+        {
+          "name": "add-mcscopilot",
+          "description": "Adds Microsoft Copilot Studio connector to a Power Apps code app. Use when invoking Copilot Studio agents, sending prompts to agents, or integrating agent responses.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-mcscopilot"
+        },
+        {
+          "name": "add-office365",
+          "description": "Adds Office 365 Outlook connector to a Power Apps code app. Use when accessing calendars, sending emails, reading inbox, or managing Outlook events.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-office365"
+        },
+        {
+          "name": "add-onedrive",
+          "description": "Adds OneDrive for Business connector to a Power Apps code app. Use when uploading, downloading, listing, or managing files in OneDrive.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-onedrive"
+        },
+        {
+          "name": "add-sharepoint",
+          "description": "Adds SharePoint Online connector to a Power Apps code app. Use when reading lists, managing documents, or integrating with SharePoint sites. Can also create new SharePoint lists.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-sharepoint"
+        },
+        {
+          "name": "add-teams",
+          "description": "Adds Microsoft Teams connector to a Power Apps code app. Use when sending Teams messages, posting to channels, or integrating with Teams chat.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-teams"
+        },
+        {
+          "name": "create-code-app",
+          "description": "Creates Power Apps code apps using React and Vite. Use when building code apps, scaffolding projects, or deploying to Power Platform.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "create-code-app"
+        },
+        {
+          "name": "deploy",
+          "description": "Builds and deploys a Power Apps code app to Power Platform. Use when deploying changes, redeploying an existing app, or pushing updates.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "deploy"
+        },
+        {
+          "name": "list-connections",
+          "description": "Lists Power Platform connections in the current environment. Use when you need a connection ID before adding a connector to a code app.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "list-connections"
+        },
+        {
+          "name": "report-issue",
+          "description": "Use this skill when the user wants to \"report a bug\", \"file an issue\", \"report an issue\", \"submit a bug report\", or report any problem with the code-apps plugin to the GitHub repository.",
+          "userInvocable": true,
+          "argumentHint": "[optional: brief description of the bug]",
+          "arguments": "[optional: brief description of the bug]",
+          "skillDirectory": "report-issue"
+        }
+      ]
+    },
+    {
+      "name": "mcp-apps",
+      "description": "Generate MCP App widgets for MCP tools",
+      "category": "development",
+      "tags": [
+        "mcp",
+        "mcp-apps",
+        "microsoft",
+        "power platform",
+        "widget"
+      ],
+      "source": "./plugins/mcp-apps",
+      "skills": [
+        {
+          "name": "generate-mcp-app-ui",
+          "description": "Generate an MCP App widget (self-contained HTML) for an MCP tool. Describe the visual you want and paste your tool's test output. Use when user asks to create an MCP App, widget, or visual for a tool.",
+          "userInvocable": true,
+          "argumentHint": "<description of what the widget should display>",
+          "arguments": "<description of what the widget should display>",
+          "skillDirectory": "generate-mcp-app-ui"
+        },
+        {
+          "name": "report-issue",
+          "description": "Use this skill when the user wants to \"report a bug\", \"file an issue\", \"report an issue\", \"submit a bug report\", or report any problem with the mcp-apps plugin to the GitHub repository.",
+          "userInvocable": true,
+          "argumentHint": "[optional: brief description of the bug]",
+          "arguments": "[optional: brief description of the bug]",
+          "skillDirectory": "report-issue"
+        }
+      ]
+    },
+    {
+      "name": "model-apps",
+      "description": "Build and deploy generative pages for Power Apps model-driven apps",
+      "category": "development",
+      "tags": [
+        "generative pages",
+        "genux",
+        "microsoft",
+        "model-driven apps",
+        "power apps",
+        "power platform"
+      ],
+      "source": "./plugins/model-apps",
+      "skills": [
+        {
+          "name": "genpage",
+          "description": "Creates, updates, and deploys Power Apps generative pages for model-driven apps using React v17, TypeScript, and Fluent UI V9. Completes workflow from requirements to deployment. Uses PAC CLI to deploy the page code. Use it when user asks to build, retrieve, or update a page in an existing Microsoft Power Apps model-driven app. Use it when user mentions \"generative page\", \"page in a model-driven\", or \"genux\".",
+          "userInvocable": true,
+          "argumentHint": "[optional: page description or 'deploy' or 'update']",
+          "arguments": "[optional: page description or 'deploy' or 'update']",
+          "skillDirectory": "genpage"
+        },
+        {
+          "name": "report-issue",
+          "description": "Use this skill when the user wants to \"report a bug\", \"file an issue\", \"report an issue\", \"submit a bug report\", or report any problem with the model-apps plugin to the GitHub repository.",
+          "userInvocable": true,
+          "argumentHint": "[optional: brief description of the bug]",
+          "arguments": "[optional: brief description of the bug]",
+          "skillDirectory": "report-issue"
+        }
+      ]
+    },
+    {
+      "name": "power-pages",
+      "description": "Power Pages development and management plugin for Claude Code and GitHub Copilot",
+      "category": "development",
+      "tags": [
+        "microsoft",
+        "microsoft power platform",
+        "power pages",
+        "power platform"
+      ],
+      "source": "./plugins/power-pages",
+      "skills": [
+        {
+          "name": "activate-site",
+          "description": "Activates and provisions a Power Pages website in a Power Platform environment via the Power Platform REST API. Use when the user wants to activate, provision, turn on, or enable a Power Pages website or portal.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "activate-site"
+        },
+        {
+          "name": "add-cloud-flow",
+          "description": "Integrates Power Automate cloud flows into a Power Pages site. Lists available flows, suggests relevant ones based on intent, identifies scenarios and web roles, creates metadata files, and generates client-side code to call flows. Handles both new flow registration and adding already-registered flows to additional pages without re-creating metadata. Use when the user wants to add, connect, register, or link a Power Automate cloud flow to their site.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-cloud-flow"
+        },
+        {
+          "name": "add-sample-data",
+          "description": "Populates Dataverse tables with sample records for testing and demoing a Power Pages site. Use when the user wants to add sample data, seed data, generate test records, or insert demo data into their tables.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-sample-data"
+        },
+        {
+          "name": "add-seo",
+          "description": "Adds SEO essentials to a Power Pages code site, including robots.txt, sitemap.xml, meta tags, Open Graph tags, and favicon configuration. Use when the user wants to improve search engine optimization or make their site more searchable.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-seo"
+        },
+        {
+          "name": "add-server-logic",
+          "description": "Creates, edits, and manages Power Pages Server Logic files — server-side JavaScript that runs securely on the Power Pages runtime. Orchestrates the full lifecycle: gathering requirements, fetching documentation, implementing code, configuring site settings, and deploying. Use when the user wants to add server-side code, create API endpoints, or move logic from the browser to the server in their Power Pages site.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "add-server-logic"
+        },
+        {
+          "name": "audit-permissions",
+          "description": "Audits existing table permissions on a Power Pages site by analyzing them against site code and Dataverse metadata. Generates an HTML audit report with findings grouped by severity (critical, warning, info, pass) and suggests fixes for issues found. Use when the user wants to review, verify, or check table permissions for security issues.",
+          "userInvocable": true,
+          "argumentHint": "[optional: specific table or concern]",
+          "arguments": "[optional: specific table or concern]",
+          "skillDirectory": "audit-permissions"
+        },
+        {
+          "name": "create-site",
+          "description": "Creates a new Power Pages code site (SPA) using React, Angular, Vue, or Astro. Guides through the full process from initial concept to deployed site: requirements discovery, scaffolding, component planning, design, implementation, validation, and deployment. Use when the user wants to create, build, or scaffold a new Power Pages website or portal.",
+          "userInvocable": true,
+          "argumentHint": "Optional site description",
+          "arguments": "Optional site description",
+          "skillDirectory": "create-site"
+        },
+        {
+          "name": "create-webroles",
+          "description": "Creates and configures web roles for a Power Pages code site. Web roles control access and permissions for site users, including authenticated and anonymous roles. Use when the user wants to create, add, set up, or manage web roles for their site.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "create-webroles"
+        },
+        {
+          "name": "deploy-site",
+          "description": "Deploys an existing Power Pages code site to a Power Pages environment using PAC CLI. Handles tooling verification, authentication, environment confirmation, building, and uploading. Use when the user wants to deploy, upload, or publish their code site.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "deploy-site"
+        },
+        {
+          "name": "integrate-backend",
+          "description": "Analyzes the user's business problem and recommends the right backend integration approach — Web API, Server Logic, Cloud Flows, or a combination — for a Power Pages site, then routes to the appropriate specialized skill. Use when the user wants to add backend integration, connect to data, or needs help deciding which backend approach to use.",
+          "userInvocable": true,
+          "argumentHint": "describe what your backend needs to do",
+          "arguments": "describe what your backend needs to do",
+          "skillDirectory": "integrate-backend"
+        },
+        {
+          "name": "integrate-webapi",
+          "description": "Integrates Power Pages Web API into a site's frontend code with proper permissions and deployment. Orchestrates the full integration lifecycle: code integration, table permissions setup, and deployment for Dataverse CRUD operations. Use when the user wants to add Web API calls, connect to Dataverse, or add data fetching to their frontend.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "integrate-webapi"
+        },
+        {
+          "name": "report-issue",
+          "description": "Use this skill when the user wants to \"report a bug\", \"file an issue\", \"report an issue\", \"submit a bug report\", or report any problem with the power-pages plugin to the GitHub repository.",
+          "userInvocable": true,
+          "argumentHint": "[optional: brief description of the bug]",
+          "arguments": "[optional: brief description of the bug]",
+          "skillDirectory": "report-issue"
+        },
+        {
+          "name": "setup-auth",
+          "description": "Sets up authentication (login/logout via Microsoft Entra ID) and role-based authorization for a Power Pages code site. Configures identity providers, protected routes, and access control. Use when the user wants to add login, configure Entra ID, enable authentication, or add role-based access to their site.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "setup-auth"
+        },
+        {
+          "name": "setup-datamodel",
+          "description": "Creates Dataverse tables, columns, and relationships for a Power Pages site based on a data model proposal. Use when the user wants to set up the data model, create database tables, or build the Dataverse schema for their site.",
+          "userInvocable": true,
+          "argumentHint": null,
+          "arguments": null,
+          "skillDirectory": "setup-datamodel"
+        },
+        {
+          "name": "test-site",
+          "description": "Tests a deployed, activated Power Pages site at runtime using browser-based navigation, page crawling, and API request verification via Playwright. Use when the user wants to test, verify, or smoke-test their deployed site.",
+          "userInvocable": true,
+          "argumentHint": "<site-url>",
+          "arguments": "<site-url>",
+          "skillDirectory": "test-site"
+        }
+      ]
+    }
+  ]
+}
