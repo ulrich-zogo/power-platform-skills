@@ -143,12 +143,13 @@ Instructions:
 2. Read `${CLAUDE_PLUGIN_ROOT}/references/intent-detection-matrix.md` and `${CLAUDE_PLUGIN_ROOT}/references/orchestration-patterns.md`.
 3. Analyze requirements and identify required skills.
 4. Build a dependency graph and execution plan.
-5. Present the plan via plan mode and get approval.
-6. Execute phases sequentially and in parallel per the approved plan.
-7. Update `[PROJECT_ROOT]/power-platform-project.json` after each phase.
-8. Handle errors using retry-once plus explicit recovery choice.
-9. Run project state validation before final summary.
-10. Return a consolidated summary and final project state.
+5. In OpenCode wrapper mode, invoke child skills by prefixing the manifest plugin name to the skill name. Use `code-apps` as the prefix for `code-apps-preview`; for example, `/create-site` from `power-pages` becomes `/power-pages-create-site`, and `/create-code-app` from `code-apps-preview` becomes `/code-apps-create-code-app`.
+6. Present the plan via plan mode and get approval.
+7. Execute phases sequentially and in parallel per the approved plan.
+8. Update `[PROJECT_ROOT]/power-platform-project.json` after each phase.
+9. Handle errors using retry-once plus explicit recovery choice.
+10. Run project state validation before final summary.
+11. Return a consolidated summary and final project state.
 ```
 
 Wait for the orchestrator agent to finish. Do not interrupt the agent while it is waiting for plan approval or executing phases.

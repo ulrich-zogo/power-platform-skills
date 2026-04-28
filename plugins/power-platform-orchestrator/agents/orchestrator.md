@@ -126,7 +126,7 @@ For each ready phase:
 1. Verify all dependencies are `completed` or explicitly optional.
 2. Mark the phase `in_progress` in the project state.
 3. Build arguments for the child skill using the original intent, project root, environment ID, and upstream outputs.
-4. Invoke the child skill with the `Skill` tool.
+4. Invoke the child skill with the `Skill` tool. In OpenCode wrapper mode, translate manifest skills to installed wrapper names by prefixing the plugin name to the skill name. Use `code-apps` as the prefix for `code-apps-preview`; for example, `/create-site` from `power-pages` becomes `/power-pages-create-site`, and `/create-code-app` from `code-apps-preview` becomes `/code-apps-create-code-app`.
 5. Capture success, failure, artifact paths, IDs, URLs, and summaries.
 6. Update the phase status, outputs, timestamps, and artifact registry in the project state.
 
