@@ -76,6 +76,18 @@
                 "connectors",
                 "microsoft"
             ]
+        },
+        {
+            "name": "power-platform-orchestrator",
+            "source": "./plugins/power-platform-orchestrator",
+            "description": "Coordinate multi-component Power Platform projects across plugins",
+            "category": "development",
+            "tags": [
+                "power platform",
+                "orchestrator",
+                "multi-plugin",
+                "microsoft"
+            ]
         }
     ]
 }

@@ -4,7 +4,7 @@ Official agent skills/plugins for Power Platform development by Microsoft.
 
 ## Overview
 
-This repository is a plugin marketplace for Claude Code and GitHub Copilot, plus a filesystem-based skill and agent distribution for OpenCode. Each plugin provides skills, agents, and commands to help developers build on the Power Platform.
+This repository is a plugin marketplace for Claude Code and GitHub Copilot, plus a filesystem-based skill and agent distribution for OpenCode. Each plugin provides skills, agents, and commands to help developers build on the Power Platform. The orchestrator plugin coordinates multi-component solutions across the other plugins.
 
 ## Installation
 
@@ -54,6 +54,7 @@ Run these commands inside a Claude Code or GitHub Copilot CLI session:
     /plugin install mcp-apps@power-platform-skills
     /plugin install code-apps-preview@power-platform-skills
     /plugin install canvas-apps@power-platform-skills
+    /plugin install power-platform-orchestrator@power-platform-skills
     ```
 
 ### OpenCode
@@ -76,8 +77,15 @@ OpenCode skill names are prefixed by plugin to avoid collisions. Common entry po
 - `/mcp-apps-generate-mcp-app-ui`
 - `/code-apps-create-code-app`
 - `/canvas-apps-generate-canvas-app`
+- `/power-platform-orchestrator-power-platform-orchestrator`
 
 ## Available Plugins
+
+### [Power Platform Orchestrator](plugins/power-platform-orchestrator/README.md) (`plugins/power-platform-orchestrator`)
+
+Coordinate complete Power Platform solutions that span multiple plugins and components.
+
+**Coordinates**: Power Pages, Canvas Apps, Code Apps, Model Apps, MCP Apps, shared Dataverse/environment context
 
 ### [Power Pages](plugins/power-pages/README.md) (`plugins/power-pages`)
 
@@ -128,6 +136,7 @@ To develop and test plugins locally, follow these steps:
     claude --plugin-dir /path/to/power-platform-skills/plugins/mcp-apps
     claude --plugin-dir /path/to/power-platform-skills/plugins/code-apps
     claude --plugin-dir /path/to/power-platform-skills/plugins/canvas-apps
+    claude --plugin-dir /path/to/power-platform-skills/plugins/power-platform-orchestrator
     ```
 
 ## Running Without Interruption
@@ -219,10 +228,15 @@ power-platform-skills/
 │   │   ├── agents/
 │   │   ├── skills/
 │   │   └── shared/           # Shared instructions + references
-│   └── canvas-apps/          # Canvas Apps plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       ├── references/       # Technical + design guides
+│   ├── canvas-apps/          # Canvas Apps plugin
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   ├── references/       # Technical + design guides
+│   │   └── skills/
+│   └── power-platform-orchestrator/
+│       ├── agents/           # Multi-plugin planning agent
+│       ├── references/       # Generated skill manifest + patterns
+│       ├── scripts/          # Manifest generation + state validation
 │       └── skills/
 ├── AGENTS.md                 # Development guidelines
 └── README.md

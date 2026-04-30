@@ -248,6 +248,37 @@ function resolveMarketplaceSource(source) {
   return source.replace(/^\.\//, "");
 }
 
+function getOpenCodeCompatibilitySkillRoots() {
+  return [
+    path.join(HOME, ".claude", "skills"),
+    path.join(HOME, ".agents", "skills"),
+    path.join(OPENCODE_CONFIG_ROOT, "skills"),
+  ];
+}
+
+function collectSkillNamesFromRoots(roots) {
+  const skills = new Map();
+
+  for (const root of roots) {
+    if (!exists(root)) continue;
+
+    for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+
+      const skillPath = path.join(root, entry.name, "SKILL.md");
+      if (!exists(skillPath)) continue;
+
+      const content = fs.readFileSync(skillPath, "utf8");
+      const skillName = readFrontmatterName(content) || entry.name;
+      if (!skills.has(skillName)) {
+        skills.set(skillName, skillPath);
+      }
+    }
+  }
+
+  return skills;
+}
+
 function getOpenCodePrefix(pluginName) {
   return pluginName === "code-apps-preview" ? "code-apps" : pluginName;
 }
@@ -378,10 +409,13 @@ function installOpenCode(plugins) {
   const descriptors = collectOpenCodeEntries(repoRoot, plugins);
   const installedSkills = [];
   const installedAgents = [];
+  const skippedSkills = [];
 
   cleanupOpenCodeInstall();
   ensureDir(path.join(OPENCODE_CONFIG_ROOT, "skills"));
   ensureDir(path.join(OPENCODE_CONFIG_ROOT, "agents"));
+
+  const existingSkills = collectSkillNamesFromRoots(getOpenCodeCompatibilitySkillRoots());
 
   info("Generating OpenCode skill wrappers...");
   for (const descriptor of descriptors) {
@@ -399,15 +433,29 @@ function installOpenCode(plugins) {
       const targetDir = path.join(OPENCODE_CONFIG_ROOT, "skills", installedName);
       const targetPath = path.join(targetDir, "SKILL.md");
 
+      if (existingSkills.has(installedName)) {
+        skippedSkills.push({
+          name: installedName,
+          existingPath: existingSkills.get(installedName),
+        });
+        continue;
+      }
+
       let updated = rewriteOpenCodeContent(content, descriptor.pluginRoot, descriptor.skillMap);
       updated = replaceFrontmatterName(updated, installedName);
 
       ensureDir(targetDir);
       fs.writeFileSync(targetPath, updated);
       installedSkills.push(installedName);
+      existingSkills.set(installedName, targetPath);
     }
   }
   ok(`Installed ${installedSkills.length} OpenCode skills`);
+  if (skippedSkills.length > 0) {
+    info(
+      `Skipped ${skippedSkills.length} duplicate OpenCode skills already available via compatibility paths`
+    );
+  }
 
   info("Generating OpenCode agent wrappers...");
   for (const descriptor of descriptors) {
@@ -590,10 +638,12 @@ function printGetStarted(tool) {
     console.log("    opencode session -> /mcp-apps-generate-mcp-app-ui");
     console.log("    opencode session -> /code-apps-create-code-app");
     console.log("    opencode session -> /canvas-apps-generate-canvas-app");
+    console.log("    opencode session -> /power-platform-orchestrator-power-platform-orchestrator");
     return;
   }
 
   console.log(`    ${tool} session  ->  /power-pages:create-site`);
+  console.log(`    ${tool} session  ->  /power-platform-orchestrator:power-platform-orchestrator`);
 }
 
 // ── Main ──────────────────────────────────────────────────────
@@ -772,7 +822,9 @@ async function main() {
 }
 
 module.exports = {
+  collectSkillNamesFromRoots,
   collectOpenCodeEntries,
+  getOpenCodeCompatibilitySkillRoots,
   installOpenCode,
   loadMarketplace,
   prepareOpenCodeSource,
